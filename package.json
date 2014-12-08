@@ -1,0 +1,64 @@
+{
+  "name": "boilerplate-express-polymer",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "db": "mongod --dbpath ./db/dev/",
+    "build": "gulp",
+    "watch": "gulp --watch",
+    "start": "./node_modules/.bin/nodemon -w packages.json -w 'app/**/*.js' -w app.js app.js",
+    "start-prod": "NODE_ENV=production exit"
+  },
+  "dependencies": {
+    "async": "^0.9.0",
+    "bcrypt-nodejs": "0.0.3",
+    "body-parser": "^1.10.0",
+    "compression": "^1.2.1",
+    "connect-flash": "^0.1.1",
+    "cookie-parser": "~1.3.2",
+    "debug": "^1.0.4",
+    "express": "^4.10.4",
+    "express-session": "^1.9.3",
+    "intl": "^0.1.4",
+    "lodash": "^2.4.1",
+    "moment": "^2.8.4",
+    "mongoose": "^3.8.20",
+    "morgan": "^1.5.0",
+    "passport": "^0.2.1",
+    "passport-facebook": "^1.0.3",
+    "passport-local": "^1.0.0",
+    "passport-twitter": "^1.0.2",
+    "prerender-node": "^1.1.1",
+    "serve-favicon": "^2.1.6",
+    "swig": "^1.4.2"
+  },
+  "devDependencies": {
+    "browserify": "^6.3.4",
+    "browserify-shim": "^3.8.1",
+    "debowerify": "^0.9.1",
+    "event-stream": "^3.1.7",
+    "gulp": "^3.8.10",
+    "gulp-browserify": "^0.5.0",
+    "gulp-clone": "^1.0.0",
+    "gulp-concat": "^2.4.2",
+    "gulp-concat-css": "^1.1.1",
+    "gulp-cssmin": "^0.1.6",
+    "gulp-ignore": "^1.2.1",
+    "gulp-ng-annotate": "^0.4.1",
+    "gulp-rename": "^1.2.0",
+    "gulp-sass": "^1.2.4",
+    "gulp-sourcemaps": "^1.2.8",
+    "gulp-uglify": "^1.0.1",
+    "gulp-util": "^3.0.1",
+    "minimist": "^1.1.0",
+    "nodemon": "^1.2.1",
+    "vinyl-buffer": "^1.0.0",
+    "vinyl-source-stream": "^1.0.0",
+    "watchify": "^2.1.1"
+  },
+  "browserify": {
+    "transform": [
+      "debowerify"
+    ]
+  }
+}

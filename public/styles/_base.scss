@@ -1,0 +1,73 @@
+
+// @import "variables";
+
+/************************************************************
+ * Base
+ **/
+
+.bg {
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.no-bg {
+  background: transparent;
+}
+
+img.icon-image {
+  background: transparent;
+  height: 24px;
+  width: 24px;
+  vertical-align: middle;
+}
+
+img.icon-image-big {
+  height: 32px;
+  width: 32px;
+}
+
+.text-justify {
+  text-align: justify;
+}
+
+.title {
+  font-family: $font-family-title;
+  text-transform: capitalize;
+}
+
+.uppercase {
+  text-transform: uppercase;
+}
+
+.lowercase {
+  text-transform: lowercase;
+}
+
+.capitalize {
+  text-transform: capitalize;
+}
+
+.location-field {
+  font-style: italic;
+  font-size: 14px;
+  color: #666;
+}
+
+
+.facebook-text {
+  color: $facebook;
+}
+
+.icon-medium {
+  font-size: 24px;
+}
+
+.icon-big {
+  font-size: 48px;
+}
+
+
+/**
+ * END Base
+ ***********************************************************/

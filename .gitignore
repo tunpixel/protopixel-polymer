@@ -1,0 +1,9 @@
+.DS_Store
+.sass-cache/
+npm-debug.log
+node_modules
+components
+public/lib
+.idea/
+*.sublime-*
+db/
