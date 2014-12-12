@@ -16,7 +16,7 @@
 
 	<!-- Facebook META -->
  	<meta property="og:title" content="My App">
-  <meta property="og:description" content="the Tunpixel product!">
+  <meta property="og:description" content="a Tunpixel product!">
   <meta property="og:url" content="http://myapp.tn/">
   <meta property="og:image" content="http://myapp.tn/logo.png">
 
@@ -36,19 +36,11 @@
 </head>
 <body fullbleed vertical layout unresolve>
 
-	{% if not share %}
-<!-- 	<div class="jumbotron">
-		<div class="container">
-			<h1>Bienvenue à My App!</h1>
-		    <p>...</p>
-		</div>
-	</div> -->
-	{% endif %}
-
 	{% block content %}{% endblock %}
 
 	{% block body %}
 	<!-- // <script src="/scripts/main.bundle.js"></script> -->
 	{% endblock %}
+
 </body>
 </html>

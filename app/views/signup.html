@@ -17,7 +17,7 @@
 
     <h1>Signup</h1>
     <!-- LOGIN FORM -->
-    <form action="{{AUTH_SIGNUP}}" method="post">
+    <form action="{{ROUTES.AUTH_SIGNUP}}" method="post">
 
       <div class="form-group{% if fields.email %} has-error{% endif %}">
         <label>Email</label>
@@ -36,12 +36,12 @@
 
     <hr>
 
-    <a href="/auth/facebook" class="btn btn-primary"><span class="fa fa-facebook"></span> Facebook</a>
-    <a href="/auth/twitter" class="btn btn-primary"><span class="fa fa-twitter"></span> Twitter</a>
+    <a href="{{ROUTES.AUTH_HOME}}/facebook" class="btn btn-primary"><span class="fa fa-facebook"></span> Facebook</a>
+    <a href="{{ROUTES.AUTH_HOME}}/twitter" class="btn btn-primary"><span class="fa fa-twitter"></span> Twitter</a>
 
     <hr>
 
-    <p>Already have an account? <a href="{{AUTH_LOGIN}}">Login</a>
+    <p>Already have an account? <a href="{{ROUTES.AUTH_LOGIN}}">Login</a>
     </p>
   </div>
 

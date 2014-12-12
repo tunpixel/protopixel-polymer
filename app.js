@@ -23,10 +23,9 @@ var app = express();
 
 var config = require('./app/config/config');
 
-app.locals.AUTH_REDIRECT = '/';
-app.locals.AUTH_LOGIN = '/auth/login';
-app.locals.AUTH_LOGOUT = '/auth/logout';
-app.locals.AUTH_SIGNUP = '/auth/signup';
+var ROUTES = require('./app/config/auth').ROUTES;
+
+app.locals.ROUTES = Object.create(ROUTES);
 
 var db = mongoose.connect(config.db);
 
@@ -35,7 +34,7 @@ app.engine('html', swig.renderFile);
 app.set('view engine', 'html');
 app.set('views', path.join(__dirname, 'app/views'));
 
-require('./app/config/swig.js')(swig, app);
+require('./app/config/swig')(swig, app);
 
 
 // uncomment after placing your favicon in /public
@@ -54,7 +53,7 @@ app.use(session({
 }));
 app.use(flash());
 
-require('./app/config/passport.js')(passport);
+require('./app/config/passport')(passport);
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -64,7 +63,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(require('prerender-node'));
 
 
-app.use('/auth', require('./app/routes/routes')(app, passport));
+app.use(ROUTES.AUTH_HOME, require('./app/routes/auth'));
 app.use('/', require('./app/routes/users'));
 
 
