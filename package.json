@@ -6,7 +6,7 @@
         "db": "mkdir -p ./db/dev && mongod --dbpath ./db/dev/",
         "build": "gulp",
         "watch": "gulp --watch",
-        "start": "./node_modules/.bin/nodemon -w packages.json -w 'app/**/*.js' -w app.js app.js",
+        "start": "./node_modules/.bin/nodemon -w packages.json -w 'backend/**/*.js' -w app.js app.js",
         "start-prod": "NODE_ENV=production exit"
     },
     "dependencies": {

@@ -29,7 +29,7 @@ function isAuthenticated(req, res, next) {
 /* GET home page. */
 router.get('/', isAuthenticated, function(req, res, next) {
     res.render('index.html', {
-        title: "My App"
+        title: "My Tunpixel Boilerplate"
     });
 });
 

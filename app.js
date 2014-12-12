@@ -21,9 +21,9 @@ var intl = require('intl');
 
 var app = express();
 
-var config = require('./app/config/config');
+var config = require('./backend/config/config');
 
-var ROUTES = require('./app/config/auth').ROUTES;
+var ROUTES = require('./backend/config/auth').ROUTES;
 
 app.locals.ROUTES = Object.create(ROUTES);
 
@@ -32,13 +32,13 @@ var db = mongoose.connect(config.db);
 // view engine setup
 app.engine('html', swig.renderFile);
 app.set('view engine', 'html');
-app.set('views', path.join(__dirname, 'app/views'));
+app.set('views', path.join(__dirname, 'backend/views'));
 
-require('./app/config/swig')(swig, app);
+require('./backend/config/swig')(swig, app);
 
 
-// uncomment after placing your favicon in /public
-//app.use(favicon(__dirname + '/public/favicon.ico'));
+// uncomment after placing your favicon in /frontend
+//backend.use(favicon(__dirname + '/frontend/favicon.ico'));
 app.use(logger('dev'));
 app.use(compress());
 
@@ -53,18 +53,18 @@ app.use(session({
 }));
 app.use(flash());
 
-require('./app/config/passport')(passport);
+require('./backend/config/passport')(passport);
 app.use(passport.initialize());
 app.use(passport.session());
 
 
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'frontend')));
 
 app.use(require('prerender-node'));
 
 
-app.use(ROUTES.AUTH_HOME, require('./app/routes/auth'));
-app.use('/', require('./app/routes/users'));
+app.use(ROUTES.AUTH_HOME, require('./backend/routes/auth'));
+app.use('/', require('./backend/routes/users'));
 
 
 // catch 404 and forward to error handler
