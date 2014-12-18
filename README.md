@@ -9,14 +9,4 @@ npm run db
 
 # start development server
 npm start
-
-# build
-npm run build
-# or
-gulp
-
-# build and watch 
-npm run watch
-# or
-gulp --watch
 ```

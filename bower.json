@@ -5,14 +5,6 @@
     "Tunpixel <contact@tunpixel.tn>"
   ],
   "license": "MIT",
-  "ignore": [
-    "**/.*",
-    "node_modules",
-    "bower_components",
-    "public/lib",
-    "test",
-    "tests"
-  ],
   "dependencies": {
     "jquery": "~2.1.1",
     "nprogress": "~0.1.6",

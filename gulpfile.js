@@ -2,6 +2,8 @@
 /* global require, console */
 'use strict';
 
+process.exit();
+
 /** Build Guidelines
  * - compilation target (start script) must be a single file (no *.(scss|js) in gulp.src)
  * - for every script/style, it's generated:
@@ -82,12 +84,12 @@ gulp.task('shared', ['shared-styles', 'shared-scripts']);
 
 /**
  * ./styles/main.scss --> main.bundle.css, main.bundle.min.css
- * sass ./public/styles/main.scss:public/styles/main.css
- * sass -w ./public/styles/main.scss:public/styles/main.css // watch
+ * sass ./fronend/styles/main.scss:fronend/styles/main.css
+ * sass -w ./fronend/styles/main.scss:fronend/styles/main.css // watch
  */
 gulp.task('shared-styles', function() {
 
-  var DIR = './public/styles';
+  var DIR = './fronend/styles';
 
   var stream = gulp.src(DIR + '/main.scss')
     .pipe(sourcemaps.init())
@@ -110,15 +112,15 @@ gulp.task('shared-styles', function() {
 
 /**
  * ./scripts/main.js --> main.bundle.js, main.bundle.min.js
- * cat ./public/lib/jquery/dist/jquery.js ./public/lib/bootstrap/dist/js/bootstrap.js > ./public/main.bundle.js
+ * cat ./fronend/lib/jquery/dist/jquery.js ./fronend/lib/bootstrap/dist/js/bootstrap.js > ./fronend/main.bundle.js
  */
 gulp.task('shared-scripts', function() {
 
-  var DIR = './public/scripts';
+  var DIR = './fronend/scripts';
 
   var stream = gulp.src([
-      './public/components/jquery/dist/jquery.js',
-      './public/components/bootstrap/dist/js/bootstrap.js'
+      './fronend/components/jquery/dist/jquery.js',
+      './fronend/components/bootstrap/dist/js/bootstrap.js'
     ])
     .pipe(sourcemaps.init({
       loadMaps: true
@@ -176,16 +178,16 @@ function styleTaskFactory(DIR, FILENAME, TASKNAME) {
   };
 }
 
-gulp.task('opinions-timeline-styles', styleTaskFactory('./public/modules/opinions/styles', 'timeline', 'opinions-timeline-styles'));
+gulp.task('opinions-timeline-styles', styleTaskFactory('./fronend/modules/opinions/styles', 'timeline', 'opinions-timeline-styles'));
 
-gulp.task('opinions-opinion-styles', styleTaskFactory('./public/modules/opinions/styles', 'opinion', 'opinions-opinion-styles'));
+gulp.task('opinions-opinion-styles', styleTaskFactory('./fronend/modules/opinions/styles', 'opinion', 'opinions-opinion-styles'));
 
-gulp.task('opinions-item_-styles', styleTaskFactory('./public/modules/opinions/styles', 'item_', 'opinions-item_-styles'));
+gulp.task('opinions-item_-styles', styleTaskFactory('./fronend/modules/opinions/styles', 'item_', 'opinions-item_-styles'));
 
 
 // gulp.task('opinions-styles', function() {
 
-//  // var DIR = './public/modules/opinions/styles';
+//  // var DIR = './fronend/modules/opinions/styles';
 
 //  // var stream1 = gulp.src(DIR + '/timeline.scss')
 //  //  .pipe(sourcemaps.init())
@@ -234,14 +236,14 @@ gulp.task('opinions-item_-styles', styleTaskFactory('./public/modules/opinions/s
 
 
 //  // if (IS_WATCH)
-//  //  gulp.watch(['bower.json', DIR + '/*.scss', './public/styles/*.scss'], ['opinions-styles']);
+//  //  gulp.watch(['bower.json', DIR + '/*.scss', './fronend/styles/*.scss'], ['opinions-styles']);
 
 //  // return es.merge(stream1, stream2, stream3);
 
 //  // return es.merge(
-//  //  styleTaskFactory('./public/modules/opinions/styles', 'timeline', 'opinions-styles')(),
-//  //  styleTaskFactory('./public/modules/opinions/styles', 'opinion', 'opinions-styles')(),
-//  //  styleTaskFactory('./public/modules/opinions/styles', 'item_', 'opinions-styles')()
+//  //  styleTaskFactory('./fronend/modules/opinions/styles', 'timeline', 'opinions-styles')(),
+//  //  styleTaskFactory('./fronend/modules/opinions/styles', 'opinion', 'opinions-styles')(),
+//  //  styleTaskFactory('./fronend/modules/opinions/styles', 'item_', 'opinions-styles')()
 //  // );
 
 // });
@@ -278,7 +280,7 @@ function scriptTaskFactory(DIR, FILENAME) {
     //      .pipe(sourcemaps.write('./'))
     //      .pipe(gulp.dest(DIR));
 
-    //    var stream2 = gulp.src(['./public/scripts/bundle.js', DIR + '/' + FILENAME + '.bundle.js'])
+    //    var stream2 = gulp.src(['./fronend/scripts/bundle.js', DIR + '/' + FILENAME + '.bundle.js'])
     //      .pipe(sourcemaps.init())
     //      .pipe(rename(FILENAME + '.bundle.all.js'))
     //      .pipe(sourcemaps.write())
@@ -327,7 +329,7 @@ function scriptTaskFactory(DIR, FILENAME) {
         .pipe(sourcemaps.write('./'))
         .pipe(gulp.dest(DIR));
 
-      var stream2 = gulp.src(['./public/scripts/bundle.js', DIR + '/' + FILENAME + '.bundle.js'])
+      var stream2 = gulp.src(['./fronend/scripts/bundle.js', DIR + '/' + FILENAME + '.bundle.js'])
         .pipe(sourcemaps.init({
           loadMaps: true
         }))
@@ -355,14 +357,14 @@ function scriptTaskFactory(DIR, FILENAME) {
   };
 }
 
-gulp.task('opinions-timeline-scripts', scriptTaskFactory('./public/modules/opinions/scripts', 'timeline'));
+gulp.task('opinions-timeline-scripts', scriptTaskFactory('./fronend/modules/opinions/scripts', 'timeline'));
 
-gulp.task('opinions-opinion-scripts', scriptTaskFactory('./public/modules/opinions/scripts', 'opinion'));
+gulp.task('opinions-opinion-scripts', scriptTaskFactory('./fronend/modules/opinions/scripts', 'opinion'));
 
-gulp.task('opinions-restaurant-scripts', scriptTaskFactory('./public/modules/opinions/scripts', 'restaurant'));
+gulp.task('opinions-restaurant-scripts', scriptTaskFactory('./fronend/modules/opinions/scripts', 'restaurant'));
 
-gulp.task('opinions-plate-scripts', scriptTaskFactory('./public/modules/opinions/scripts', 'plate'));
+gulp.task('opinions-plate-scripts', scriptTaskFactory('./fronend/modules/opinions/scripts', 'plate'));
 
-gulp.task('opinions-pair-scripts', scriptTaskFactory('./public/modules/opinions/scripts', 'pair'));
+gulp.task('opinions-pair-scripts', scriptTaskFactory('./fronend/modules/opinions/scripts', 'pair'));
 
-gulp.task('opinions-user-scripts', scriptTaskFactory('./public/modules/opinions/scripts', 'user'));
+gulp.task('opinions-user-scripts', scriptTaskFactory('./fronend/modules/opinions/scripts', 'user'));
