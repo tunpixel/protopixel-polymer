@@ -1,0 +1,33 @@
+{% extends 'layouts/default.html' %}
+
+{% block title %}Kool.tn{% endblock %}
+
+{% block content %}
+<div class="container">
+
+  <div class="col-sm-9 col-sm-offset-1 text-center title">
+
+   <span class="tab-item">
+      <img src="/images/kool.svg" class="no-bg"  style=" border-radius: 50%;" width="60px" >
+    </span>
+
+    {% if !user.isValid %} 
+    <h1>Welcome to Kool!</h1>
+    <h3>Your new account is all set up!</h3>
+
+        <form action="/auth/valid/{{tockenurl}}" method="post">
+
+      <button type="submit" class="btn btn-link"><h4>Click here to proceed as {{user.email}} </h4></button>
+    </form>
+    {% else %}
+
+    <h3>There is a small problem</h3>
+    <h3>This invitation link isn't valid. Perhaps you already used it?</h3>
+
+
+    {% endif %}
+
+</div>
+</div>
+
+{% endblock %}

@@ -15,6 +15,11 @@
 {% endblock %}
 
 {% block content %}
+{% if !user.isValid %} 
+<h3>Almost there...</h3>
+    <h3>Please check your email to confirm your account.</h3>
+
+{% else %}
 
 <core-scaffold>
 
@@ -40,10 +45,8 @@
   </div>
 </core-scaffold>
 
-<!-- <div class="container">
-	<h1>Welcome {{user.name || user.email}}!</h1>
-  <pre>{{user | json }}</pre>
-  <a href="{{AUTH_LOGOUT}}">Logout</a>
-</div> -->
 
+
+
+{% endif %}
 {% endblock %}

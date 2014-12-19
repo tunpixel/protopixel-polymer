@@ -4,6 +4,9 @@ process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
 var express = require('express');
 var session = require('express-session');
+var mongoStore = require('connect-mongo')({
+  session: session
+});
 
 var path = require('path');
 var favicon = require('serve-favicon');
@@ -48,6 +51,21 @@ app.use(bodyParser.urlencoded({
 }));
 
 app.use(cookieParser());
+
+
+// Express MongoDB session storage
+app.use(session({
+  saveUninitialized: true,
+  resave: true,
+  secret: config.sessionSecret,
+  store: new mongoStore({
+    db: db.connection.db,
+    collection: config.sessionCollection
+  }),
+  cookie: config.sessionCookie,
+  name: config.sessionName
+}));
+
 app.use(session({
   secret: config.sessionSecret
 }));
@@ -69,7 +87,7 @@ app.use('/', require('./backend/routes/users'));
 
 // catch 404 and forward to error handler
 if (app.get('env') !== 'development') {
-  app.use(function(req, res, next) {
+  app.use(function (req, res, next) {
     res.render('404');
   });
 }
@@ -78,7 +96,7 @@ if (app.get('env') !== 'development') {
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development') {
-  app.use(function(err, req, res, next) {
+  app.use(function (err, req, res, next) {
     res.status(err.status || 500);
     res.render('error', {
       message: err.message,
@@ -89,7 +107,7 @@ if (app.get('env') === 'development') {
 
 // production error handler
 // no stacktraces leaked to user
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   res.status(err.status || 500);
   res.render('error', {
     message: err.message,

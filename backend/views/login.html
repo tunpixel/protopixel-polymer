@@ -17,7 +17,7 @@
 
   <div class="col-sm-6 col-sm-offset-3">
 
-    <h1><span class="fa fa-sign-in"></span> Login</h1>
+    <h1>Login</h1>
 
         <form action="{{ROUTES.AUTH_LOGIN}}" method="post">
 
@@ -32,19 +32,20 @@
             <span class="help-block">{{fields.password}}</span>
           </div>
 
-          <button type="submit" class="btn btn-primary">Login</button>
+          <button type="submit" class="btn btn-sm btn-primary">Login</button>
 
         </form>
 
         <hr>
 
-        <a href="{{ROUTES.AUTH_HOME}}/facebook" class="btn btn-primary"><span class="fa fa-facebook"></span> Facebook</a>
-        <a href="{{ROUTES.AUTH_HOME}}/twitter" class="btn btn-primary"><span class="fa fa-twitter"></span> Twitter</a>
+        <a href="{{ROUTES.AUTH_HOME}}/facebook" class="btn btn-sm btn-primary">Facebook</a>
+        <a href="{{ROUTES.AUTH_HOME}}/twitter" class="btn btn-sm btn-default">Twitter</a>
+        <a href="{{ROUTES.AUTH_HOME}}/google" class="btn btn-sm btn-danger">Google</a>
 
         <hr>
 
         <p>Need an account? <a href="{{ROUTES.AUTH_SIGNUP}}">Signup</a>
+          | <a href="/auth/forgot">Forgot password?</a>
         </p>
   </div>
-
 {% endblock %}
