@@ -1,0 +1,60 @@
+{% extends 'layouts/default.html' %}
+
+{% block body %}{% endblock %}
+
+{% block body %}
+{% parent %}
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+
+  <div class="col-sm-6 col-sm-offset-3">
+
+    <h1>Login</h1>
+
+    {% if message.length %}
+    <div class="alert alert-danger">
+      {{message[0]}}
+    </div>
+    {% endif %}
+
+
+    {% if messageS.length %}
+    <div class="alert alert-success">
+      {{messageS[0]}}
+    </div>
+    {% endif %}
+    <form action="{{ROUTES.AUTH_LOGIN}}" method="post">
+
+      <div class="form-group{% if fields.email %}  has-error{% endif %}">
+        <!-- <label>Email</label> -->
+        <input type="email" class="form-control" name="email" value="{{email}}" placeholder="Email" required autofocus>
+      </div>
+
+      <div class="form-group{% if fields.password %} has-error{% endif %}">
+        <!-- <label>Password</label> -->
+        <input type="password" class="form-control" name="password" placeholder="Password" required>
+      </div>
+
+      <button type="submit" class="btn btn-sm btn-primary">Login</button>
+
+    </form>
+
+    <hr>
+
+    <a href="{{ROUTES.AUTH_HOME}}/facebook" class="btn btn-sm btn-primary"><span class="fa fa-facebook"></span> Facebook</a>
+    <a href="{{ROUTES.AUTH_HOME}}/twitter" class="btn btn-sm btn-success"><span class="fa fa-twitter"></span> Twitter</a>
+    <a href="{{ROUTES.AUTH_HOME}}/google" class="btn btn-sm btn-danger">Google</a>
+
+    <hr>
+
+    <p>Need an account? <a href="{{ROUTES.AUTH_SIGNUP}}">Signup</a>
+      | <a href="/auth/forgot">Forgot password?</a></p>
+
+  </div>
+
+</div>
+
+{% endblock %}

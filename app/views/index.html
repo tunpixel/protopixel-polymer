@@ -1,0 +1,113 @@
+{% extends 'layouts/default.html' %}
+
+{% block title %}My App{% endblock %}
+
+{% block head %}
+  {% parent %}
+  <script src="/components/webcomponentsjs/webcomponents.js"></script>
+  <link rel="import" href="/components/polymer/polymer.html">
+  <link rel="import" href="/components/core-elements/core-elements.html">
+  <link rel="import" href="/components/paper-elements/paper-elements.html">
+
+  <link rel="import" href="/components/font-roboto/roboto.html">
+  <link rel="import" href="/components/core-header-panel/core-header-panel.html">
+  <link rel="import" href="/components/core-toolbar/core-toolbar.html">
+{% endblock %}
+
+{% block content %}
+
+
+<core-scaffold>
+
+  <core-header-panel navigation flex>
+    <core-toolbar id="navheader">
+      <span>Menu</span>
+    </core-toolbar>
+    <core-menu>
+      <core-item label="One"></core-item>
+      <core-item label="Two"></core-item>
+    </core-menu>
+
+  </core-header-panel>
+
+  <span tool>My App</span>
+
+  {% if !user.isValid %} 
+    <div class="content">
+         <img src="/images/tunpixel-logo.png" class="no-bg"  style=" border-radius: 50%;" width="150px" >
+        <h5>Almost there...</h5>
+        <h5>Please check your email to confirm your account.</h5>
+    </div>
+
+{% else %}
+
+<div class="content">
+  <h5>Welcome {{user.firstname}}</h5>
+
+{% if user.facebook %} 
+  <h7> {{user.facebook.email}} </h7>
+{% endif %}
+
+<h7> {{user.email}} </h7>
+<pre>{{user | json }}</pre>
+
+<pre>This is Facebook Credentials
+{{user.facebook | json}}</pre>
+
+<pre>This is Twitter Credentials
+{{user.twitter | json}}</pre>
+
+<pre>This is Google Credentials
+{{user.google | json}}</pre>
+
+<hr>
+<br>
+<!--       <a href="/user/{{user.id}}">Profile</a>
+      | -->
+<a href="{{ROUTES.AUTH_LOGOUT}}">Logout</a>
+
+<hr>
+
+{% if !user.local.connected and !user.local.signup %}
+  <a href="{{ROUTES.AUTH_LINK}}" class="btn btn-sm btn-default">Connect Local!</a>  |
+{% endif %}
+
+
+{% if !user.facebook.id %}
+  <a href="{{ROUTES.AUTH_LINK}}/facebook" class="btn btn-sm btn-primary">Connect Facebook</a>  |
+{% endif %}
+
+
+
+{% if !user.twitter.id %}
+   <a href="{{ROUTES.AUTH_LINK}}/twitter" class="btn btn-sm btn-success">Connect Twitter!</a>  |
+{% endif %}
+
+{% if !user.google.id %}
+   <a href="{{ROUTES.AUTH_LINK}}/google" class="btn btn-sm btn-danger">Connect Google!</a>  |
+{% endif %}
+
+<hr>
+
+{% if user.local.connected or user.local.signup %}
+  <a href="{{ROUTES.AUTH_UNLINK}}" class="btn btn-sm btn-default">Unlink Local</a> |
+{% endif %}
+
+
+{% if user.facebook.id %}
+  <a href="{{ROUTES.AUTH_UNLINK}}/facebook" class="btn btn-sm btn-primary">Unlink Facebook</a> |
+{% endif %}
+
+{% if user.twitter.id %}
+  <a href="{{ROUTES.AUTH_UNLINK}}/twitter" class="btn btn-sm btn-success">Unlink Twitter</a> |
+{% endif %}
+
+
+{% if user.google.id %}
+  <a href="{{ROUTES.AUTH_UNLINK}}/google" class="btn btn-sm btn-danger">Unlink Google</a> |
+{% endif %}
+  </div>
+</core-scaffold>
+
+{% endif %}
+{% endblock %}

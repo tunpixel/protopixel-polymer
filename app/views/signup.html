@@ -1,0 +1,70 @@
+{% extends 'layouts/default.html' %}
+
+{% block body %}{% endblock %}
+
+{% block content %}
+{% parent %}
+
+<div class="container">
+
+  <div class="col-sm-6 col-sm-offset-3">
+
+    <h1>Signup</h1>
+
+    {% if message.length %}
+    <div class="alert alert-danger">
+      {{message}}
+    </div>
+    {% endif %}
+
+    <form action="{{ROUTES.AUTH_SIGNUP}}" method="post">
+
+      <div class="form-group{% if fields.email %} has-error{% endif %}">
+        <label>Email</label>
+        <input type="email" class="form-control" name="email" value="{{email}}" required autofocus>
+        <span class="help-block">{{fields.email}}</span>
+      </div>
+
+      <div class="form-group{% if fields.firstname %} has-error{% endif %}">
+        <label>First Name</label>
+        <input type="text" class="form-control" name="firstname" value="{{firstname}}" required autofocus>
+        <span class="help-block">{{fields.firstname}}</span>
+      </div>
+
+       <div class="form-group{% if fields.lastname %} has-error{% endif %}">
+        <label>Last Name</label>
+        <input type="text" class="form-control" name="lastname" value="{{lastname}}" required autofocus>
+        <span class="help-block">{{fields.lastname}}</span>
+      </div>
+
+      <div class="form-group{% if fields.password %} has-error{% endif %}">
+        <label>Password</label>
+        <input type="password" class="form-control" name="password" required>
+        <span class="help-block">{{fields.password}}</span>
+      </div>
+
+      <div class="form-group{% if fields.passwordConfirmation %} has-error{% endif %}">
+        <label>Password Confirmation</label>
+        <input type="password" class="form-control" name="passwordConfirmation" required>
+        <span class="help-block">{{fields.passwordConfirmation}}</span>
+      </div>
+
+
+      <button type="submit" class="btn btn-sm btn-primary">Signup</button>
+    </form>
+
+    <hr>
+
+    <a href="{{ROUTES.AUTH_HOME}}/facebook" class="btn btn-sm btn-primary"><span class="fa fa-facebook"></span> Facebook</a>
+    <a href="{{ROUTES.AUTH_HOME}}/twitter" class="btn btn-sm btn-success"><span class="fa fa-twitter"></span> Twitter</a>
+    <a href="{{ROUTES.AUTH_HOME}}/google" class="btn btn-sm btn-danger"><span class="fa fa-twitter"></span> Google</a>
+
+    <hr>
+
+    <p>Already have an account? <a href="{{ROUTES.AUTH_LOGIN}}">Login</a>
+    </p>
+  </div>
+
+</div>
+
+{% endblock %}

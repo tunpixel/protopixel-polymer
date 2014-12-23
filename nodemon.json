@@ -1,0 +1,19 @@
+{
+  "restartable": "rs",
+  "ignore": [
+    ".git",
+    "node_modules",
+    "app/**/*.test.js",
+    "components",
+    "bower_components",
+    ".sass-cache",
+    "public/**/*"
+  ],
+  "watch": [
+    "packages.json",
+    "app/**/*.js",
+    "app.js"
+  ],
+  "ext": "js json",
+  "verbose": true
+}

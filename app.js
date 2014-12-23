@@ -1,124 +1,35 @@
 'use strict';
 
+/*
+ * First we set the node enviornment variable if not set before
+ */
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
-var express = require('express');
-var session = require('express-session');
-var mongoStore = require('connect-mongo')({
-  session: session
-});
+/*
+ * Load Newrelic monitoring
+ */
+if (process.env.NODE_ENV === 'production')
+  require('newrelic');
 
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-var flash = require('connect-flash');
-var compress = require('compression');
+/*
+ * Module dependencies.
+ */
+var config = require('./app/config');
+console.log('CONFIG', config);
 
-var swig = require('swig');
+// Bootstrap db connection
 var mongoose = require('mongoose');
-var passport = require('passport');
-
-var intl = require('intl');
-
-var app = express();
-
-var config = require('./backend/config/config');
-
-var ROUTES = require('./backend/config/auth').ROUTES;
-
-app.locals.ROUTES = Object.create(ROUTES);
-
 var db = mongoose.connect(config.db);
 
-// view engine setup
-app.engine('html', swig.renderFile);
-app.set('view engine', 'html');
-app.set('views', path.join(__dirname, 'backend/views'));
-
-require('./backend/config/swig')(swig, app);
-
-
-// uncomment after placing your favicon in /frontend
-//backend.use(favicon(__dirname + '/frontend/favicon.ico'));
-app.use(logger('dev'));
-app.use(compress());
-
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({
-  extended: false
-}));
-
-app.use(cookieParser());
-
-
-// Express MongoDB session storage
-app.use(session({
-  saveUninitialized: true,
-  resave: true,
-  secret: config.sessionSecret,
-  store: new mongoStore({
-    db: db.connection.db,
-    collection: config.sessionCollection
-  }),
-  cookie: config.sessionCookie,
-  name: config.sessionName
-}));
-
-app.use(session({
-  secret: config.sessionSecret
-}));
-app.use(flash());
-
-require('./backend/config/passport')(passport);
-app.use(passport.initialize());
-app.use(passport.session());
-
-
-app.use(express.static(path.join(__dirname, 'frontend')));
-
-app.use(require('prerender-node'));
-
-
-app.use(ROUTES.AUTH_HOME, require('./backend/routes/auth'));
-app.use('/', require('./backend/routes/users'));
-
-
-// catch 404 and forward to error handler
-if (app.get('env') !== 'development') {
-  app.use(function (req, res, next) {
-    res.render('404');
-  });
-}
-
-// error handlers
-// development error handler
-// will print stacktrace
-if (app.get('env') === 'development') {
-  app.use(function (err, req, res, next) {
-    res.status(err.status || 500);
-    res.render('error', {
-      message: err.message,
-      error: err
-    });
-  });
-}
-
-// production error handler
-// no stacktraces leaked to user
-app.use(function (err, req, res, next) {
-  res.status(err.status || 500);
-  res.render('error', {
-    message: err.message,
-    error: {}
-  });
-});
+// Init the express application
+var app = require('./app/config/express')(db);
 
 // Start the app by listening on <port>
-app.listen(config.port);
+var http = app.listen(config.port);
+
+
+// Expose app
+exports = module.exports = app;
 
 // Logging initialization
 console.log('Express app started on port ' + config.port);
-
-module.exports = app;

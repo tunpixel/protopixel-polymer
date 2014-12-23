@@ -1,0 +1,62 @@
+{% extends 'layouts/default.html' %}
+
+{% block body %}{% endblock %}
+
+{% block content %}
+{% parent %}
+
+<div class="container">
+
+  {% if message.length %}
+  <div class="alert alert-danger">
+    {{message[0]}}
+  </div>
+  {% endif %}
+
+  <div class="col-sm-6 col-sm-offset-3">
+
+    <!-- show any messages that come back with authentication -->
+
+    <h1>Add local account</h1>
+    <hr>
+    <!-- LOGIN FORM -->
+    <form action="{{ROUTES.AUTH_LINK}}" method="post">
+
+
+      <div class="form-group{% if fields.email %} has-error{% endif %}">
+        <label>Email</label>
+        <input type="email" class="form-control" name="email" value="{{email}}" required autofocus>
+        <span class="help-block">{{fields.email}}</span>
+
+              <div class="form-group{% if fields.firstname %} has-error{% endif %}">
+        <label>First Name</label>
+        <input type="text" class="form-control" name="firstname" value="{{firstname}}" required autofocus>
+        <span class="help-block">{{fields.firstname}}</span>
+      </div>
+
+       <div class="form-group{% if fields.lastname %} has-error{% endif %}">
+        <label>Last Name</label>
+        <input type="text" class="form-control" name="lastname" value="{{lastname}}" required autofocus>
+        <span class="help-block">{{fields.lastname}}</span>
+      </div>
+
+      </div>
+
+      <div class="form-group{% if fields.password %} has-error{% endif %}">
+        <label>Password</label>
+        <input type="password" class="form-control" name="password" required>
+        <span class="help-block">{{fields.password}}</span>
+      </div>
+
+      <div class="form-group{% if fields.passwordConfirmation %} has-error{% endif %}">
+        <label>Password Confirmation</label>
+        <input type="password" class="form-control" name="passwordConfirmation" required>
+        <span class="help-block">{{fields.passwordConfirmation}}</span>
+      </div>
+
+      <button type="submit" class="btn btn-sm btn-primary">add local</button>
+    </form>
+
+</div>
+
+{% endblock %}
