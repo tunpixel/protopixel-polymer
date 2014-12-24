@@ -145,6 +145,16 @@ module.exports = function (db) {
   // Load routes
   app.use('/auth', require('./../routes/auth'));
 
+  var auth = require('./../middlewares/auth');
+
+  app.get('/', auth.authenticatedAccessMiddleware, function (req, res, next) {
+    res.render('index.html', {
+      title: "Tunpixel Boilerplate",
+      message: req.flash('loginMessage')
+    });
+  });
+
+
   /*
    * Unauthorized access handler
    */

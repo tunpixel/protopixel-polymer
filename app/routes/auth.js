@@ -30,13 +30,17 @@ var path = require('path'),
  * Auth home page
  */
 
-router.get('/', auth.authenticatedAccessMiddleware, function (req, res, next) {
-  res.render('index.html', {
-    title: "Tunpixel Boilerplate",
-    message: req.flash('loginMessage')
-  });
-});
+// router.get('/', auth.authenticatedAccessMiddleware, function (req, res, next) {
+//   res.render('index.html', {
+//     title: "Tunpixel Boilerplate",
+//     message: req.flash('loginMessage')
+//   });
+// });
 
+
+router.get('/', function (req, res, next) {
+  return res.redirect('/');
+})
 
 /**
  * Local Signup
