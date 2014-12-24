@@ -55,7 +55,6 @@
     "debowerify": "^0.9.1",
     "event-stream": "^3.1.7",
     "gulp": "^3.8.10",
-    "gulp-browserify": "^0.5.0",
     "gulp-clone": "^1.0.0",
     "gulp-concat": "^2.4.2",
     "gulp-concat-css": "^1.1.1",
