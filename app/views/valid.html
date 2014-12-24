@@ -1,6 +1,6 @@
 {% extends 'layouts/default.html' %}
 
-{% block title %}Tunpixel Boilerplate{% endblock %}
+{% block title %}ProtoPixel Polymer{% endblock %}
 
 {% block content %}
 <div class="container">
@@ -10,11 +10,11 @@
    <span class="tab-item">
       <img src="/images/tunpixel-logo.png" class="no-bg"  style=" border-radius: 50%;" width="150px" >
     </span>
-    <h4>Welcome to Tunpixel Boilerplate!</h4>
+    <h4>Welcome to ProtoPixel Polymer!</h4>
     <hr>
 
-    {% if !user.isValid %} 
-    
+    {% if !user.isValid %}
+
     <h5>Your new account is all set up!</h5>
 
         <form action="/auth/valid/{{tockenurl}}" method="post">
@@ -22,7 +22,7 @@
       <button type="submit" class="btn btn-link"><h6>Click here to proceed as {{user.email}} </h6></button>
     </form>
     {% else %}
-  
+
     <h4>There is a small problem</h4>
     <h4>This invitation link isn't valid. Perhaps you already used it?</h4>
 

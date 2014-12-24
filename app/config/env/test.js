@@ -3,7 +3,7 @@
 module.exports = {
 
   app: {
-    title: 'Express Polymer Boilerplate (TEST)'
+    title: 'ProtoPixel Polymer (TEST)'
   }
 
 };

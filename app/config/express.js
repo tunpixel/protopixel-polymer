@@ -48,14 +48,8 @@ module.exports = function (db) {
   app.locals.title = config.app.title;
   app.locals.description = config.app.description;
   app.locals.keywords = config.app.keywords;
+  app.locals.url = config.app.url;
   app.locals.ROUTES = ROUTES;
-  app.locals.cacheServer = 'http://cache.kool.tn';
-
-  // Passing the request url to environment locals
-  app.use(function (req, res, next) {
-    res.locals.url = req.protocol + '://' + req.headers.host + req.url;
-    next();
-  });
 
   // Initialize models
   require('./../models/user.js');
@@ -120,14 +114,27 @@ module.exports = function (db) {
   app.use(passport.initialize());
   app.use(passport.session());
 
+  // connect flash for flash messages
+  app.use(flash());
+  app.use(function (req, res, next) {
+    var render = res.render;
+    res.render = function () {
+      res.locals.messages = req.flash();
+      render.apply(res, arguments);
+    }
+    var json = res.json;
+    res.json = function () {
+      res.locals.messages = req.flash();
+      json.apply(res, arguments);
+    }
+    next();
+  });
+
   // Passing user to environment locals
   app.use(function (req, res, next) {
     res.locals.user = req.isAuthenticated() ? req.user : null;
     next();
   });
-
-  // connect flash for flash messages
-  app.use(flash());
 
   // Use helmet to secure Express headers
   app.use(helmet.xframe());
@@ -147,11 +154,14 @@ module.exports = function (db) {
 
   var auth = require('./../middlewares/auth');
 
-  app.get('/', auth.authenticatedAccessMiddleware, function (req, res, next) {
-    res.render('index.html', {
-      title: "Tunpixel Boilerplate",
-      message: req.flash('loginMessage')
-    });
+  // app.get('/', auth.authenticatedAccessMiddleware, function (req, res, next) {
+  //   res.render('index.html', {
+  //     title: "ProtoPixel Polymer"
+  //   });
+  // });
+
+  app.get('/', function (req, res, next) {
+    res.redirect('/auth');
   });
 
   /*
@@ -161,7 +171,7 @@ module.exports = function (db) {
     if (err.status !== 401)
       return next(err);
     if (req.xhr)
-      res.send(401, {
+      res.json(401, {
         success: false,
         message: "Unauthorized Access"
       });
@@ -178,7 +188,7 @@ module.exports = function (db) {
       console.error(err.stack);
       res.status(err.status || 500);
       if (req.xhr)
-        res.send({
+        res.json({
           success: false,
           message: err.message,
           error: err
@@ -197,7 +207,7 @@ module.exports = function (db) {
   app.use(function (err, req, res, next) {
     res.status(err.status || 500);
     if (req.xhr)
-      res.send({
+      res.json({
         success: false,
         message: err.message
       });
@@ -211,7 +221,7 @@ module.exports = function (db) {
   if (process.env.NODE_ENV != 'development')
     app.use(function (req, res) {
       if (req.xhr)
-        res.send({
+        res.json({
           url: req.originalUrl,
           error: 'Not Found'
         });

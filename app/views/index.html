@@ -30,83 +30,73 @@
 
   </core-header-panel>
 
-  <span tool>My App</span>
+  <span tool>ProtoPixel Polymer</span>
 
-  {% if !user.isValid %} 
-    <div class="content">
-         <img src="/images/tunpixel-logo.png" class="no-bg"  style=" border-radius: 50%;" width="150px" >
-        <h5>Almost there...</h5>
-        <h5>Please check your email to confirm your account.</h5>
-    </div>
+  {% if messages.error.length %}
+  <div class="alert alert-danger">
+    {{messages.error|join("<br>"|safe)}}
+  </div>
+  {% endif %}
 
-{% else %}
+  {% if messages.success %}
+  <div class="alert alert-success">
+    {{messages.success|join("<br>"|safe)}}
+  </div>
+  {% endif %}
+
+
+  {% if !user.isValid %}
+  <div class="content">
+    <img src="/images/tunpixel-logo.png" class="no-bg"  style=" border-radius: 50%;" width="150px" >
+    <h5>Almost there...</h5>
+    <h5>Please check your email to confirm your account.</h5>
+  </div>
+  {% else %}
 
 <div class="content">
-  <h5>Welcome {{user.firstname}}</h5>
 
-{% if user.facebook %} 
-  <h7> {{user.facebook.email}} </h7>
-{% endif %}
+  <h3>Welcome {{user.name}}!</h3>
 
-<h7> {{user.email}} </h7>
-<pre>{{user | json }}</pre>
+  <hr>
 
-<pre>This is Facebook Credentials
-{{user.facebook | json}}</pre>
+  <a href="{{ROUTES.AUTH_LOGOUT}}">Logout</a>
 
-<pre>This is Twitter Credentials
-{{user.twitter | json}}</pre>
+  <hr>
 
-<pre>This is Google Credentials
-{{user.google | json}}</pre>
+  {% if !user.local.connected and !user.local.signup %}
+    <a href="{{ROUTES.AUTH_LINK}}" class="btn btn-sm btn-default">Link Local!</a>  |
+  {% endif %}
 
-<hr>
-<br>
-<!--       <a href="/user/{{user.id}}">Profile</a>
-      | -->
-<a href="{{ROUTES.AUTH_LOGOUT}}">Logout</a>
+  {% if user.local.connected or user.local.signup %}
+    <a href="{{ROUTES.AUTH_UNLINK}}" class="btn btn-sm btn-default">Unlink Local</a> |
+  {% endif %}
 
-<hr>
+  {% if !user.facebook.id %}
+    <a href="{{ROUTES.AUTH_LINK}}/facebook" class="btn btn-sm btn-primary">Link Facebook</a>  |
+  {% endif %}
 
-{% if !user.local.connected and !user.local.signup %}
-  <a href="{{ROUTES.AUTH_LINK}}" class="btn btn-sm btn-default">Connect Local!</a>  |
-{% endif %}
+  {% if user.facebook.id %}
+    <a href="{{ROUTES.AUTH_UNLINK}}/facebook" class="btn btn-sm btn-primary">Unlink Facebook</a> |
+  {% endif %}
 
+  {% if !user.twitter.id %}
+     <a href="{{ROUTES.AUTH_LINK}}/twitter" class="btn btn-sm btn-success">Link Twitter!</a>  |
+  {% endif %}
 
-{% if !user.facebook.id %}
-  <a href="{{ROUTES.AUTH_LINK}}/facebook" class="btn btn-sm btn-primary">Connect Facebook</a>  |
-{% endif %}
+  {% if user.twitter.id %}
+    <a href="{{ROUTES.AUTH_UNLINK}}/twitter" class="btn btn-sm btn-success"><b>Un</b>link Twitter</a> |
+  {% endif %}
 
+  {% if !user.google.id %}
+     <a href="{{ROUTES.AUTH_LINK}}/google" class="btn btn-sm btn-danger">Link Google!</a>  |
+  {% endif %}
 
+  {% if user.google.id %}
+    <a href="{{ROUTES.AUTH_UNLINK}}/google" class="btn btn-sm btn-danger">Unlink Google</a> |
+  {% endif %}
 
-{% if !user.twitter.id %}
-   <a href="{{ROUTES.AUTH_LINK}}/twitter" class="btn btn-sm btn-success">Connect Twitter!</a>  |
-{% endif %}
-
-{% if !user.google.id %}
-   <a href="{{ROUTES.AUTH_LINK}}/google" class="btn btn-sm btn-danger">Connect Google!</a>  |
-{% endif %}
-
-<hr>
-
-{% if user.local.connected or user.local.signup %}
-  <a href="{{ROUTES.AUTH_UNLINK}}" class="btn btn-sm btn-default">Unlink Local</a> |
-{% endif %}
-
-
-{% if user.facebook.id %}
-  <a href="{{ROUTES.AUTH_UNLINK}}/facebook" class="btn btn-sm btn-primary">Unlink Facebook</a> |
-{% endif %}
-
-{% if user.twitter.id %}
-  <a href="{{ROUTES.AUTH_UNLINK}}/twitter" class="btn btn-sm btn-success">Unlink Twitter</a> |
-{% endif %}
-
-
-{% if user.google.id %}
-  <a href="{{ROUTES.AUTH_UNLINK}}/google" class="btn btn-sm btn-danger">Unlink Google</a> |
-{% endif %}
   </div>
+
 </core-scaffold>
 
 {% endif %}

@@ -8,11 +8,19 @@
 <div class="container">
 
   <div class="col-sm-6 col-sm-offset-3">
-    <!-- show any messages that come back with authentication -->
-  {% if message.length %}
-  <div class="alert alert-danger">
-    {{message}}
-  </div>
+
+    {% if messages.error.length %}
+    <div class="alert alert-danger">
+      {{messages.error|join("<br>"|safe)}}
+    </div>
+    {% endif %}
+
+    {% if messages.success %}
+    <div class="alert alert-success">
+      {{messages.success|join("<br>"|safe)}}
+    </div>
+    {% endif %}
+
   {% endif %}
 
     <h1>Reset Password</h1>

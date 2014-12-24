@@ -8,7 +8,7 @@ var port = process.env.PORT || 3000;
 module.exports = {
 
   app: {
-    title: 'Express Polymer Boilerplate',
+    title: 'ProtoPixel Polymer',
     description: '...',
     keywords: '...',
     url: process.env.URL

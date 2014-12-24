@@ -33,6 +33,14 @@
 	<link rel="stylesheet" href="/components/bootswatch/paper/bootstrap.css">
 	{% endblock %}
 
+	<script>
+	var config = {};
+	// config. = {{|json|safe}};
+	config.url = {{url|json|safe}};
+	var messages = {{messages|json|safe}};
+	var user = {{user|json|safe}};
+	</script>
+
 </head>
 <body fullbleed vertical layout unresolve>
 
@@ -41,6 +49,10 @@
 	{% block body %}
 	<!-- // <script src="/scripts/main.bundle.js"></script> -->
 	{% endblock %}
+
+ <pre>
+   messages: {{messages|json}}
+ </pre>
 
 </body>
 </html>

@@ -6,18 +6,18 @@
 {% parent %}
 
   <div class="col-sm-6 col-sm-offset-3">
-    <!-- show any messages that come back with authentication -->
-  {% if message.length %}
-  <div class="alert alert-danger">
-    {{message}}
-  </div>
-  {% endif %}
 
-    {% if messagev.length %}
-  <div class="alert alert-info">
-    {{messagev}}
-  </div>
-  {% endif %}
+    {% if messages.error.length %}
+    <div class="alert alert-danger">
+      {{messages.error|join("<br>"|safe)}}
+    </div>
+    {% endif %}
+
+    {% if messages.success %}
+    <div class="alert alert-success">
+      {{messages.success|join("<br>"|safe)}}
+    </div>
+    {% endif %}
 
     <h1>Forgot Password</h1>
     <hr>

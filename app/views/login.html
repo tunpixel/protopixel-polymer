@@ -14,18 +14,18 @@
 
     <h1>Login</h1>
 
-    {% if message.length %}
+    {% if messages.error.length %}
     <div class="alert alert-danger">
-      {{message[0]}}
+      {{messages.error|join("<br>"|safe)}}
     </div>
     {% endif %}
 
-
-    {% if messageS.length %}
+    {% if messages.success %}
     <div class="alert alert-success">
-      {{messageS[0]}}
+      {{messages.success|join("<br>"|safe)}}
     </div>
     {% endif %}
+
     <form action="{{ROUTES.AUTH_LOGIN}}" method="post">
 
       <div class="form-group{% if fields.email %}  has-error{% endif %}">

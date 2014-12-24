@@ -3,8 +3,12 @@
 /** @module config/passport */
 
 var config = require('./');
+var MESSAGES = require('./messages');
+
 
 var UserModel = require('./../models/user');
+
+var async = require('async');
 
 var nodemailer = require('nodemailer');
 var transporter = nodemailer.createTransport(config.notification.configuration);
@@ -49,12 +53,12 @@ module.exports = function (passport) {
       if (err) {
         // return done(err);
         return done(null, false, {
-          message: "Unable to login!"
+          message: MESSAGES.LOGIN_FAILURE
         });
       }
       if (!user || !user.validPassword(password)) {
         return done(null, false, {
-          message: "Invalid credentials!"
+          message: MESSAGES.INVALID_CREDENTIALS
         });
       }
       return done(null, user);
@@ -73,30 +77,30 @@ module.exports = function (passport) {
 
     if (!req.body.email || !req.body.firstname || !req.body.lastname || !req.body.password || !req.body.passwordConfirmation)
       return done(null, false, {
-        message: "Missing information!",
+      message: MESSAGES.MISSING_INFORMATION,
         fields: {
-          email: !req.body.email ? "Missing" : " ",
-          firstname: !req.body.firstname ? "Missing" : " ",
-          lastname: !req.body.lastname ? "Missing" : " ",
-          // password: !req.body.password ? "Missing" : " ",
-          // passwordConfirmation: !req.body.passwordConfirmation ? "Missing" : " ",
+          email: !req.body.email ? MESSAGES.MISSING_INPUT : " ",
+          firstname: !req.body.firstname ? MESSAGES.MISSING_INPUT : " ",
+          lastname: !req.body.lastname ? MESSAGES.MISSING_INPUT : " ",
+          // password: !req.body.password ? MESSAGES.MISSING_INPUT : " ",
+          // passwordConfirmation: !req.body.passwordConfirmation ? MESSAGES.MISSING_INPUT : " ",
         }
       });
 
     if (!/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(req.body.email))
       return done(null, false, {
-        message: "Invalid email address!",
+        message: MESSAGES.INVALID_EMAIL,
         fields: {
-          email: "Invalid"
+          email: MESSAGES.INVALID_INPUT
         }
       });
 
     if (req.body.password !== req.body.passwordConfirmation)
       return done(null, false, {
-        message: "Password mismatch!",
+        message: MESSAGES.PASSWORD_MISMATCH,
         fields: {
-          password: "Mismatch",
-          passwordConfirmation: "Mismatch",
+          password: MESSAGES.UNMATCHED_INPUT,
+          passwordConfirmation: MESSAGES.UNMATCHED_INPUT,
         }
       });
 
@@ -107,13 +111,13 @@ module.exports = function (passport) {
         if (err) {
           // return done(err);
           return done(null, false, {
-            message: "Unable to sign-up!"
+            message: MESSAGES.SIGNUP_FAILURE
           });
         }
 
         if (user) {
           return done(null, false, {
-            message: "There is an existing account created using the provided email address! Please try password reset."
+            message: MESSAGES.SIGNUP_FAILURE_EMAIL_USED
           });
         }
 
@@ -153,7 +157,7 @@ module.exports = function (passport) {
               console.log(err);
 
               return done(null, false, {
-                message: "can't send email."
+                message: MESSAGES.EMAIL_FAILURE
               });
             }
 
@@ -167,14 +171,14 @@ module.exports = function (passport) {
               if (err) {
                 console.log(err);
                 return done(null, false, {
-                  message: "can't send email."
+                  message: MESSAGES.EMAIL_FAILURE
                 });
               }
 
               transporter.sendMail({
                 from: config.notification.from,
                 to: user.email,
-                subject: 'Confirm Account Validation',
+                subject: MESSAGES.ACCOUNT_VALIDATION_SUBJECT,
                 html: html,
                 // generateTextFromHTML: true,
                 text: text
@@ -182,12 +186,12 @@ module.exports = function (passport) {
                 if (err) {
                   console.log(err);
                   return done(null, false, {
-                    message: "this is an error!"
+                    message: MESSAGES.EMAIL_FAILURE
                   });
                 }
                 console.log(responseStatus.message);
                 return done(null, false, {
-                  message: 'An e-mail has been sent to ' + user.email + ' with further instructions.'
+                  message: MESSAGES.EMAIL_SENT
                 });
               });
             });
@@ -208,7 +212,7 @@ module.exports = function (passport) {
         if (err) {
           console.log(err);
           return done(null, false, {
-            message: "enable to connect local account"
+            message: MESSAGES.LINK_FAILURE
           });
         }
 
@@ -230,66 +234,83 @@ module.exports = function (passport) {
     },
     function (req, token, refreshToken, profile, done) {
       console.log('FACEBOOK_STRATEGY');
-      if (!req.user) {
-        UserModel.findOne({
-          'facebook.id': profile.id
-        }, function (err, user) {
 
-          if (err) {
-            return done(err);
-          }
+      // async.auto({
+      //   user: function getUser(callback) {
+      //     console.log('in user');
+      //     UserModel.findOne({
+      //       'facebook.id': profile.id
+      //     }, callback);
+      //   },
+      //   // authenticate: ['user', function authenticate(callback, results) {
+      //   //   console.log('in authenticate', JSON.stringify(results));
+      //   //   callback(null, results.user);
+      //   // }]
+      // }, function (err, results) {
+      //   console.log('err = ', err);
+      //   console.log('results = ', results);
+      // });
 
-          if (user) {
-            done(null, user);
-          }
+      UserModel.findOne({
+        'facebook.id': profile.id
+      }, function (err, user) {
 
+        if (err)
+          return done(err);
+
+        if (!req.user) { // user is NOT logged in, login or signup
+
+          // login
+          if (user)
+            return done(null, user);
+
+          // signup
+          delete profile._raw;
+          // delete profile._json;
+          var picture = 'https://graph.facebook.com/' + profile.username + '/picture';
           user = new UserModel({
-            'email': profile.email ? profile.emails[0].value : null,
-            'firstname': profile.name.givenName,
-            'lastname': profile.name.familyName,
-            'gender': profile.gender,
             'facebook.id': profile.id,
+            'facebook.data': profile,
+            'email': profile.emails ? profile.emails[0].value : null,
+            'firstname': profile.name ? profile.name.givenName || '' : profile.displayName || '',
+            'lastname': profile.name ? profile.name.familyName || '' : '',
+            'gender': profile.gender || 'unknown',
+            'picture': profile.photos ? profile.photos[0].value || picture : picture,
+            // 'picture': 'https://graph.facebook.com/' + profile.username + '/picture',
             'meta.facebookSignup': true,
             'meta.facebookId': profile.id,
-            'picture': 'https://graph.facebook.com/' + profile.username + '/picture',
             'isValid': true
           });
-
           user.save(done);
 
-        });
-      } else {
-        UserModel.findOne({
-          'facebook.id': profile.id
-        }, function (err, user) {
+        } else { // user logged in .. linking
 
-          if (err) {
-            return done(err);
-          }
-
-          if (user) {
+          // link error
+          if (user)
             return done(null, false, {
-              message: "cannot connect Tunpixel Boilerplate Account. this Facebook Account is already used!"
+              message: MESSAGES.LINK_FAILURE_ACCOUNT_USED
             });
-          }
+
+          // link
+          delete profile._raw;
+          // delete profile._json;
           var user = req.user;
           user.facebook.id = profile.id;
+          user.facebook.data = profile;
           user.meta.facebookSignup = true;
           user.meta.facebookId = profile.id;
-
           user.save(function (err) {
-            if (err) {
-              console.log(err);
+            if (err)
               return done(null, false, {
-                message: "oops, this is embarrassing! enable to connect Facebook Account!"
+                message: MESSAGES.LINK_FAILURE
               });
-            }
-
             return done(null, user);
           });
 
-        });
-      }
+        }
+
+      });
+
     }));
 
   /**
@@ -303,49 +324,61 @@ module.exports = function (passport) {
       passReqToCallback: true
     },
     function (req, token, tokenSecret, profile, done) {
-      if (!req.user) {
-        UserModel.findOne({
-          'twitter.id': profile.id
-        }, function (err, user) {
 
-          if (err) {
-            return done(err);
-          }
+      UserModel.findOne({
+        'twitter.id': profile.id
+      }, function (err, user) {
 
-          if (user) {
-            console.log("user exist!");
-            done(null, user);
-          }
+        if (err)
+          return done(err);
 
+        if (!req.user) { // user is NOT logged in, login or signup
+
+          // login
+          if (user)
+            return done(null, user);
+
+          // signup
+          delete profile._raw;
+          // delete profile._json;
           user = new UserModel({
             'twitter.id': profile.id,
-            'firstname': profile.username,
+            'twitter.data': profile,
+            'email': profile.emails ? profile.emails[0].value : null,
+            'firstname': profile.name ? profile.name.givenName || '' : profile.displayName || '',
+            'lastname': profile.name ? profile.name.familyName || '' : '',
+            'gender': profile.gender || 'unknown',
+            'picture': profile.photos ? profile.photos[0].value || null : null,
             'isValid': true
           });
-
           user.save(done);
 
-        });
-      } else {
-        UserModel.findOne({
-          'twitter.id': profile.id
-        }, function (err, user) {
+        } else { // user logged in .. linking
 
-          if (err) {
-            return done(err);
-          }
+          // link error
+          if (user)
+            return done(null, false, {
+              message: MESSAGES.LINK_FAILURE_ACCOUNT_USED
+            });
 
-          if (user) {
-            console.log("user exist!");
-            done(null, user);
-          }
-
+          // link
+          delete profile._raw;
+          // delete profile._json;
           var user = req.user;
           user.twitter.id = profile.id;
-          user.save(done);
-        });
+          user.twitter.data = profile;
+          user.save(function (err) {
+            if (err)
+              return done(null, false, {
+                message: MESSAGES.LINK_FAILURE
+              });
+            return done(null, user);
+          });
 
-      }
+        }
+
+      });
+
     }));
 
   /**
@@ -359,63 +392,61 @@ module.exports = function (passport) {
       passReqToCallback: true
     },
     function (req, token, tokenSecret, profile, done) {
-      if (!req.user) {
-        UserModel.findOne({
-          'google.id': profile.id
-        }, function (err, user) {
-          if (err) {
-            console.log(err);
-            return done(err);
-          }
 
-          if (user) {
-            console.log("user exist!");
-            done(null, user);
-          }
+      UserModel.findOne({
+        'google.id': profile.id
+      }, function (err, user) {
 
-          console.log("creating user...");
+        if (err)
+          return done(err);
 
+        if (!req.user) { // user is NOT logged in, login or signup
+
+          // login
+          if (user)
+            return done(null, user);
+
+          // signup
+          delete profile._raw;
+          // delete profile._json;
           user = new UserModel({
             'google.id': profile.id,
-            'firstname': profile.name.givenName,
-            'lastname': profile.name.familyName,
-            'gender': profile._json.gender,
-            'picture': profile._json.picture,
+            'google.data': profile,
+            'email': profile.emails ? profile.emails[0].value : null,
+            'firstname': profile.name ? profile.name.givenName || '' : profile.displayName || '',
+            'lastname': profile.name ? profile.name.familyName || '' : '',
+            'gender': profile.gender || 'unknown',
+            'picture': profile.photos ? profile.photos[0].value || null : null,
             'isValid': true
           });
-
           user.save(done);
-        });
-      } else {
-        UserModel.findOne({
-          'google.id': profile.id
-        }, function (err, user) {
-          if (err) {
-            console.log(err);
-            return done(err);
-          }
 
-          if (user) {
+        } else { // user logged in .. linking
+
+          // link error
+          if (user)
             return done(null, false, {
-              message: "cannot connect Tunpixel Boilerplate Account. this Google Account is already used!"
+              message: MESSAGES.LINK_FAILURE_ACCOUNT_USED
             });
-          }
+
+          // link
+          delete profile._raw;
+          // delete profile._json;
           var user = req.user;
           user.google.id = profile.id;
-
+          user.google.data = profile;
           user.save(function (err) {
-            if (err) {
-              console.log(err);
+            if (err)
               return done(null, false, {
-                message: "oops, this is embarrassing! enable to connect Google Account!"
+                message: MESSAGES.LINK_FAILURE
               });
-            }
-
             return done(null, user);
           });
-        });
-      }
-    }));
 
+        }
+
+      });
+
+    }));
 
 };

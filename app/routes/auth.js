@@ -18,6 +18,7 @@ var UserModel = require('./../models/user');
 
 
 var ROUTES = require('app/config/routes');
+var MESSAGES = require('app/config/messages');
 
 var auth = require('./../middlewares/auth');
 
@@ -30,16 +31,19 @@ var path = require('path'),
  * Auth home page
  */
 
-// router.get('/', auth.authenticatedAccessMiddleware, function (req, res, next) {
-//   res.render('index.html', {
-//     title: "Tunpixel Boilerplate",
-//     message: req.flash('loginMessage')
-//   });
-// });
+router.get('/', auth.authenticatedAccessMiddleware, function (req, res, next) {
+  req.flash('success', 'Hello');
+  req.flash('success', 'There!');
+  req.flash('error', 'Hello');
+  req.flash('error', 'There!');
+  res.render('index.html', {
+    title: "ProtoPixel Polymer"
+  });
+});
 
-router.get('/', function (req, res, next) {
-  return res.redirect('/');
-})
+// router.get('/', function (req, res, next) {
+//   return res.redirect('/');
+// })
 
 /**
  * Local Signup
@@ -48,23 +52,23 @@ router.get('/', function (req, res, next) {
 router.get('/signup', function (req, res) {
   if (req.isAuthenticated())
     return res.redirect(ROUTES.AUTH_HOME);
-  res.render('signup.html', {
-    message: req.flash('error')
-  });
+  res.render('signup.html');
 });
 
 router.post('/signup', function (req, res, next) {
   passport.authenticate('local', {
-    badRequestMessage: "Missing information!"
+    badRequestMessage: MESSAGES.MISSING_INFORMATION,
+    failureFlash: true,
+    // successFlash: "Success!"
   }, function (err, user, info, status) {
     console.log(arguments);
     if (err) {
       return next(err);
     }
     if (!user) {
+      req.flash('error', info.message);
       // return res.redirect(ROUTES.AUTH_SIGNUP);
       return res.render('signup.html', {
-        message: [info.message],
         fields: info.fields,
         email: req.body.email,
         firstname: req.body.firstname,
@@ -89,16 +93,18 @@ router.get('/link', function (req, res) {
 
 router.post('/link', function (req, res, next) {
   passport.authenticate('local', {
-    badRequestMessage: "Missing information!"
+    badRequestMessage: MESSAGES.MISSING_INFORMATION,
+    failureFlash: true,
+    // successFlash: "Success!"
   }, function (err, user, info, status) {
     console.log(arguments);
     if (err) {
       return next(err);
     }
     if (!user) {
+      req.flash('error', info.message);
       // return res.redirect(ROUTES.AUTH_SIGNUP);
       return res.render('local.html', {
-        message: [info.message],
         fields: info.fields,
         email: req.body.email,
         firstname: req.body.firstname,
@@ -151,7 +157,6 @@ router.post('/valid/:tokenValidation', function (req, res) {
         tokenValidation: req.params.tokenValidation
       }, function (err, user) {
         user.isValid = true;
-
         user.save(function (err) {
           if (err) {
             throw err
@@ -174,23 +179,23 @@ router.post('/valid/:tokenValidation', function (req, res) {
 router.get('/login', function (req, res) {
   if (req.isAuthenticated())
     return res.redirect(ROUTES.AUTH_HOME);
-  res.render('login.html', {
-    message: req.flash('error')
-  });
+  res.render('login.html');
 });
 
 router.post('/login', function (req, res, next) {
   passport.authenticate('login', {
-    badRequestMessage: "Missing information!"
+    badRequestMessage: MESSAGES.MISSING_INFORMATION,
+    failureFlash: true,
+    // successFlash: "Success!"
   }, function (err, user, info, status) {
     console.log(arguments);
     if (err) {
       return next(err);
     }
     if (!user) {
+      req.flash('error', info.message);
       // return res.redirect(ROUTES.AUTH_LOGIN);
       return res.render('login.html', {
-        message: [info.message],
         email: req.body.email
       });
     }
@@ -213,7 +218,6 @@ router.get('/logout', function (req, res) {
  * Password Reset
  */
 
-//forget password
 router.get('/forgot', function (req, res) {
   res.render('forgot', {
     user: req.user
@@ -303,7 +307,6 @@ router.post('/forgot', function (req, res) {
     if (err)
       return console.log(err);
     res.render('forgotR.html');
-
     // res.render('forgot.html', {
     //   messagev: 'An e-mail has been sent to your email address with further instructions.'
     // });
@@ -318,13 +321,9 @@ router.get('/reset/:token', function (req, res) {
     }
   }, function (err, user) {
     if (!user) {
-
-      return res.render('forgot.html', {
-        message: 'Password reset token is invalid or has expired.'
-      });
-
-      // req.flash('error', 'Password reset token is invalid or has expired.');
-      // return res.redirect('/auth/forgot');
+      req.flash('error', MESSAGES.INVALID_TOKEN);
+      // return res.render('forgot.html');
+      return res.redirect('/auth/forgot');
     }
     res.render('reset.html', {
       user: req.user,
@@ -335,7 +334,6 @@ router.get('/reset/:token', function (req, res) {
 
 router.post('/reset/:token', function (req, res) {
   async.waterfall([
-
     function (done) {
       UserModel.findOne({
         resetPasswordToken: req.params.token,
@@ -345,20 +343,17 @@ router.post('/reset/:token', function (req, res) {
       }, function (err, user) {
 
         if (!user) {
-          return res.render('forgot.html', {
-            message: 'Password reset token is invalid or has expired.',
-          });
-
-          // req.flash('error', 'Password reset token is invalid or has expired.');
-          // return res.redirect('back');
+          req.flash('error', MESSAGES.INVALID_TOKEN);
+          // return res.render('forgot.html');
+          return res.redirect('back');
         }
 
         if (req.body.password !== req.body.passwordConfirmation) {
+          req.flash('error', info.message);
           return res.render('reset.html', {
             user: req.user,
             tockenurl: req.params.token,
-            message: "password doesn't match confirmation"
-
+            message: MESSAGES.PASSWORD_MISMATCH
           });
         }
 
@@ -432,11 +427,8 @@ router.post('/reset/:token', function (req, res) {
     }
   ], function (err) {
     console.log(err);
+    req.flash('success', MESSAGES.PASSWORD_RESET);
     res.redirect('/auth');
-
-    // return res.render('login.html', {
-    //   messageS: "Your password has been changed."
-    // });
   });
 });
 
@@ -450,13 +442,16 @@ router.get('/facebook', passport.authenticate('facebook'));
 router.get('/facebook/callback', passport.authenticate('facebook', {
   successRedirect: ROUTES.AUTH_HOME,
   failureRedirect: ROUTES.AUTH_LOGIN,
+  failureFlash: true,
+  // successFlash: "Success!"
 }));
 
-//connect fb account
 router.get('/link/facebook', passport.authorize('facebook'));
 
 router.get('/link/facebook/callback', passport.authorize('facebook', {
   successRedirect: ROUTES.AUTH_HOME,
+  failureFlash: true,
+  // successFlash: "Success!"
 }));
 
 
@@ -465,6 +460,7 @@ router.get('/unlink/facebook', function (req, res) {
   user.facebook = undefined;
   user.meta.facebookSignup = false;
   user.save(function (err) {
+    req.flash('success', MESSAGES.UNLINK_SUCCESS);
     res.redirect(ROUTES.AUTH_HOME);
   });
 });
@@ -479,19 +475,23 @@ router.get('/twitter', passport.authenticate('twitter'));
 router.get('/twitter/callback', passport.authenticate('twitter', {
   successRedirect: ROUTES.AUTH_HOME,
   failureRedirect: ROUTES.AUTH_LOGIN,
+  failureFlash: true,
+  // successFlash: "Success!"
 }));
 
-//link twitter account
 router.get('/link/twitter', passport.authorize('twitter'));
 
 router.get('/link/twitter/callback', passport.authorize('twitter', {
-  successRedirect: ROUTES.AUTH_HOME
+  successRedirect: ROUTES.AUTH_HOME,
+  failureFlash: true,
+  // successFlash: "Success!"
 }));
 
 router.get('/unlink/twitter', function (req, res) {
   var user = req.user;
   user.twitter = undefined;
   user.save(function (err) {
+    req.flash('success', MESSAGES.UNLINK_SUCCESS);
     res.redirect(ROUTES.AUTH_HOME);
   });
 });
@@ -506,23 +506,25 @@ router.get('/google', passport.authenticate('google', {
 router.get('/google/callback', passport.authenticate('google', {
   successRedirect: ROUTES.AUTH_HOME,
   failureRedirect: ROUTES.AUTH_LOGIN,
+  failureFlash: true,
+  // successFlash: "Success!"
 }));
-
-
-//connect Google account
 
 router.get('/link/google', passport.authorize('google', {
   scope: 'https://www.googleapis.com/auth/plus.login'
 }));
 
 router.get('/link/google/callback', passport.authorize('google', {
-  successRedirect: ROUTES.AUTH_HOME
+  successRedirect: ROUTES.AUTH_HOME,
+  failureFlash: true,
+  // successFlash: "Success!"
 }));
 
 router.get('/unlink/google', function (req, res) {
   var user = req.user;
   user.google = undefined;
   user.save(function (err) {
+    req.flash('success', MESSAGES.UNLINK_SUCCESS);
     res.redirect(ROUTES.AUTH_HOME);
   });
 });

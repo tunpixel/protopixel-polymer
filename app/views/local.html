@@ -7,21 +7,24 @@
 
 <div class="container">
 
-  {% if message.length %}
+  {% if messages.error.length %}
   <div class="alert alert-danger">
-    {{message[0]}}
+    {{messages.error|join("<br>"|safe)}}
+  </div>
+  {% endif %}
+
+  {% if messages.success %}
+  <div class="alert alert-success">
+    {{messages.success|join("<br>"|safe)}}
   </div>
   {% endif %}
 
   <div class="col-sm-6 col-sm-offset-3">
 
-    <!-- show any messages that come back with authentication -->
-
     <h1>Add local account</h1>
     <hr>
     <!-- LOGIN FORM -->
     <form action="{{ROUTES.AUTH_LINK}}" method="post">
-
 
       <div class="form-group{% if fields.email %} has-error{% endif %}">
         <label>Email</label>

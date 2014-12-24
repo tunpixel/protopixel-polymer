@@ -1,5 +1,5 @@
-Express Polymer Boilerplate
-===========================
+ProtoPixel Polymer
+==================
 
 Check package.json scripts section and grunt/gulp file for test, build and run commands.
 
