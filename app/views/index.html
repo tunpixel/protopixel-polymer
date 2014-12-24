@@ -12,12 +12,92 @@
   <link rel="import" href="/components/font-roboto/roboto.html">
   <link rel="import" href="/components/core-header-panel/core-header-panel.html">
   <link rel="import" href="/components/core-toolbar/core-toolbar.html">
+
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+    }
+
+    body {
+      font-family: sans-serif;
+    }
+
+    core-scaffold {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+    }
+
+    .content {
+      /*background-color: #fff;*/
+      padding: 20px;
+    }
+
+    html /deep/ core-dropdown {
+      /*background-color: #eee;
+      color: #000;
+      border: 1px solid #ccc;
+      border-radius: 3px;*/
+    }
+
+    core-item {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    paper-button.default {
+      color: #444;
+    }
+
+    paper-button[raised].default {
+      background: #fff;
+      color: #444;
+    }
+
+
+    paper-button.facebook {
+      color: #3b5998;
+    }
+
+    paper-button[raised].facebook {
+      background: #3b5998;
+      color: #fff;
+    }
+
+
+    paper-button.twitter {
+      color: #00aced;
+    }
+
+    paper-button[raised].twitter {
+      background: #00aced;
+      color: #fff;
+    }
+
+
+
+    paper-button.google {
+      color: #dd4b39;
+    }
+
+    paper-button[raised].google {
+      background: #dd4b39;
+      color: #fff;
+    }
+
+
+
+  </style>
 {% endblock %}
 
 {% block content %}
 
 
-<core-scaffold>
+<core-scaffold >
 
   <core-header-panel navigation flex>
     <core-toolbar id="navheader">
@@ -32,6 +112,30 @@
 
   <span tool>ProtoPixel Polymer</span>
 
+  <span tool flex></span>
+
+  <core-menu-button tool>
+    <core-icon-button icon="more-vert" id="trigger">
+      <paper-ripple fit></paper-ripple>
+    </core-icon-button>
+    <core-dropdown class="dropdown" layered i-relatedTarget="{{$.trigger}}" halign="right">
+      <core-menu notap>
+        <core-item icon="account-circle" label="Profile">
+          <a href="#profile">
+            <paper-ripple fit></paper-ripple>
+          </a>
+        </core-item>
+        <core-item icon="close" label="Logout">
+          <a href="{{ROUTES.AUTH_LOGOUT}}">
+            <paper-ripple fit></paper-ripple>
+          </a>
+        </core-item>
+      </core-menu>
+    </core-dropdown>
+  </core-menu-button>
+
+<div class="content">
+
   {% if messages.error.length %}
   <div class="alert alert-danger">
     {{messages.error|join("<br>"|safe)}}
@@ -44,60 +148,41 @@
   </div>
   {% endif %}
 
-
   {% if !user.isValid %}
-  <div class="content">
-    <img src="/images/tunpixel-logo.png" class="no-bg"  style=" border-radius: 50%;" width="150px" >
-    <h5>Almost there...</h5>
-    <h5>Please check your email to confirm your account.</h5>
+  <div class="alert alert-warning">
+    Please verify your account.
   </div>
-  {% else %}
-
-<div class="content">
+  {% endif %}
 
   <h3>Welcome {{user.name}}!</h3>
 
   <hr>
 
-  <a href="{{ROUTES.AUTH_LOGOUT}}">Logout</a>
-
-  <hr>
-
   {% if !user.local.connected and !user.local.signup %}
-    <a href="{{ROUTES.AUTH_LINK}}" class="btn btn-sm btn-default">Link Local!</a>  |
-  {% endif %}
-
-  {% if user.local.connected or user.local.signup %}
-    <a href="{{ROUTES.AUTH_UNLINK}}" class="btn btn-sm btn-default">Unlink Local</a> |
+    <a href="{{ROUTES.AUTH_LINK}}"><paper-button raised class="default">Link Email</paper-button></a>
+  {% else %}
+    <a href="{{ROUTES.AUTH_UNLINK}}"><paper-button class="default"><strong>Un</strong>link Email</paper-button></a>
   {% endif %}
 
   {% if !user.facebook.id %}
-    <a href="{{ROUTES.AUTH_LINK}}/facebook" class="btn btn-sm btn-primary">Link Facebook</a>  |
-  {% endif %}
-
-  {% if user.facebook.id %}
-    <a href="{{ROUTES.AUTH_UNLINK}}/facebook" class="btn btn-sm btn-primary">Unlink Facebook</a> |
+    <a href="{{ROUTES.AUTH_LINK}}/facebook"><paper-button raised class="facebook">Link Facebook</paper-button></a>
+  {% else %}
+    <a href="{{ROUTES.AUTH_UNLINK}}/facebook"><paper-button class="facebook"><strong>Un</strong>link Facebook</paper-button></a>
   {% endif %}
 
   {% if !user.twitter.id %}
-     <a href="{{ROUTES.AUTH_LINK}}/twitter" class="btn btn-sm btn-success">Link Twitter!</a>  |
-  {% endif %}
-
-  {% if user.twitter.id %}
-    <a href="{{ROUTES.AUTH_UNLINK}}/twitter" class="btn btn-sm btn-success"><b>Un</b>link Twitter</a> |
+    <a href="{{ROUTES.AUTH_LINK}}/twitter"><paper-button raised class="twitter">Link Twitter</paper-button></a>
+  {% else %}
+    <a href="{{ROUTES.AUTH_UNLINK}}/twitter"><paper-button class="twitter"><strong>Un</strong>link Twitter</paper-button></a>
   {% endif %}
 
   {% if !user.google.id %}
-     <a href="{{ROUTES.AUTH_LINK}}/google" class="btn btn-sm btn-danger">Link Google!</a>  |
+    <a href="{{ROUTES.AUTH_LINK}}/google"><paper-button raised class="google">Link Google</paper-button></a>
+  {% else %}
+    <a href="{{ROUTES.AUTH_UNLINK}}/google"><paper-button class="google"><strong>Un</strong>link Google</paper-button></a>
   {% endif %}
-
-  {% if user.google.id %}
-    <a href="{{ROUTES.AUTH_UNLINK}}/google" class="btn btn-sm btn-danger">Unlink Google</a> |
-  {% endif %}
-
   </div>
 
 </core-scaffold>
 
-{% endif %}
 {% endblock %}
