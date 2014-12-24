@@ -36,15 +36,18 @@ var UserSchema = new Schema({
   resetPasswordExpires: Date,
 
   facebook: {
-    id: String
+    id: String,
+    data: Schema.Types.Mixed
   },
 
   twitter: {
-    id: String
+    id: String,
+    data: Schema.Types.Mixed
   },
 
   google: {
-    id: String
+    id: String,
+    data: Schema.Types.Mixed
 
   },
 

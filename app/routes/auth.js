@@ -37,7 +37,6 @@ var path = require('path'),
 //   });
 // });
 
-
 router.get('/', function (req, res, next) {
   return res.redirect('/');
 })
@@ -448,11 +447,7 @@ router.post('/reset/:token', function (req, res) {
 
 router.get('/facebook', passport.authenticate('facebook'));
 
-router.get('/facebook/callback', function (req, res, next) {
-
-  console.log('FACEBOOK_CALLBACK', req);
-  next();
-}, passport.authenticate('facebook', {
+router.get('/facebook/callback', passport.authenticate('facebook', {
   successRedirect: ROUTES.AUTH_HOME,
   failureRedirect: ROUTES.AUTH_LOGIN,
 }));

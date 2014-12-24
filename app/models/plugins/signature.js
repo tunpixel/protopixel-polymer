@@ -15,7 +15,7 @@ module.exports = exports = function creationMetaPlugin(schema, options) {
       },
       name: {
         type: String,
-        default: 'Tunpixel Boilerplate'
+        default: 'Protopixelar'
       }
     },
 

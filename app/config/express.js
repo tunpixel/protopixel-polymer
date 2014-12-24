@@ -82,13 +82,13 @@ module.exports = function (db) {
   app.set('views', './app/views');
 
   // Enable logger (morgan)
-  if (app.get('env') === 'development')
+  if (process.env.NODE_ENV == 'development')
     app.use(morgan('dev'));
 
   // Environment dependent middleware
-  if (process.env.NODE_ENV === 'development') {
+  if (process.env.NODE_ENV == 'development') {
     app.set('view cache', false); // Disable views cache
-  } else if (process.env.NODE_ENV === 'production') {
+  } else if (process.env.NODE_ENV == 'production') {
     app.locals.cache = 'memory';
   }
 
@@ -154,13 +154,12 @@ module.exports = function (db) {
     });
   });
 
-
   /*
    * Unauthorized access handler
    */
   app.use(function (err, req, res, next) {
     if (err.status !== 401)
-      return next();
+      return next(err);
     if (req.xhr)
       res.send(401, {
         success: false,
@@ -174,7 +173,7 @@ module.exports = function (db) {
    * development error handler
    * will print stacktrace
    */
-  if (app.get('env') === 'development') {
+  if (process.env.NODE_ENV == 'development')
     app.use(function (err, req, res, next) {
       console.error(err.stack);
       res.status(err.status || 500);
@@ -190,7 +189,6 @@ module.exports = function (db) {
           error: err
         });
     });
-  }
 
   /*
    * production error handler
@@ -210,8 +208,13 @@ module.exports = function (db) {
   });
 
   // Assume 404 since no middleware responded
-  if (app.get('env') !== 'development')
+  if (process.env.NODE_ENV != 'development')
     app.use(function (req, res) {
+      if (req.xhr)
+        res.send({
+          url: req.originalUrl,
+          error: 'Not Found'
+        });
       res.status(404).render('404', {
         url: req.originalUrl,
         error: 'Not Found'
