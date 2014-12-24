@@ -1,6 +1,6 @@
 {% extends 'layouts/default.html' %}
 
-{% block title %}My App{% endblock %}
+{% block title %}ProtoPixel Polymer{% endblock %}
 
 {% block head %}
   {% parent %}
@@ -8,10 +8,7 @@
   <link rel="import" href="/components/polymer/polymer.html">
   <link rel="import" href="/components/core-elements/core-elements.html">
   <link rel="import" href="/components/paper-elements/paper-elements.html">
-
   <link rel="import" href="/components/font-roboto/roboto.html">
-  <link rel="import" href="/components/core-header-panel/core-header-panel.html">
-  <link rel="import" href="/components/core-toolbar/core-toolbar.html">
 
   <style>
     html, body {
@@ -36,14 +33,7 @@
       padding: 20px;
     }
 
-    html /deep/ core-dropdown {
-      /*background-color: #eee;
-      color: #000;
-      border: 1px solid #ccc;
-      border-radius: 3px;*/
-    }
-
-    core-item {
+    paper-item {
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
@@ -78,8 +68,6 @@
       color: #fff;
     }
 
-
-
     paper-button.google {
       color: #dd4b39;
     }
@@ -89,7 +77,41 @@
       color: #fff;
     }
 
+    html /deep/ paper-item core-icon {
+      margin-right: 0.5em;
+    }
 
+    html /deep/ paper-dropdown core-menu {
+      margin: 0;
+    }
+
+    html /deep/ a.nolink {
+      color: inherit;
+      text-decoration: inherit;
+    }
+
+    paper-button:hover, paper-button.active {
+      text-decoration: none;
+      background: #fff;
+      box-shadow: 0px 4px 10px 0 rgba(0,0,0,0.1),0px 2px 10px 0px rgba(0,0,0,0.1);
+    }
+
+    paper-toast {
+      right: 10px;
+      left: auto;
+    }
+
+    paper-toast.message.error {
+      color: red;
+    }
+
+    paper-toast.message.success {
+      color: green;
+    }
+
+    paper-toast.message.warning {
+      color: orange;
+    }
 
   </style>
 {% endblock %}
@@ -97,7 +119,7 @@
 {% block content %}
 
 
-<core-scaffold >
+<core-scaffold>
 
   <core-header-panel navigation flex>
     <core-toolbar id="navheader">
@@ -107,82 +129,112 @@
       <core-item label="One"></core-item>
       <core-item label="Two"></core-item>
     </core-menu>
-
   </core-header-panel>
 
   <span tool>ProtoPixel Polymer</span>
 
   <span tool flex></span>
 
-  <core-menu-button tool>
-    <core-icon-button icon="more-vert" id="trigger">
-      <paper-ripple fit></paper-ripple>
-    </core-icon-button>
-    <core-dropdown class="dropdown" layered i-relatedTarget="{{$.trigger}}" halign="right">
-      <core-menu notap>
-        <core-item icon="account-circle" label="Profile">
-          <a href="#profile">
-            <paper-ripple fit></paper-ripple>
-          </a>
-        </core-item>
-        <core-item icon="close" label="Logout">
-          <a href="{{ROUTES.AUTH_LOGOUT}}">
-            <paper-ripple fit></paper-ripple>
-          </a>
-        </core-item>
+ <paper-menu-button tool>
+    <paper-icon-button icon="more-vert"></paper-icon-button>
+    <paper-dropdown class="dropdown" layered i-relatedTarget="{{$.trigger}}" halign="right" transition="">
+      <core-menu class="menu">
+        <a href="#profile" class="nolink"><paper-item>
+          <core-icon icon="account-circle"></core-icon>
+          Profile
+        </paper-item></a>
+        <a href="{{ROUTES.AUTH_LOGOUT}}" class="nolink"><paper-item>
+          <core-icon icon="close"></core-icon>
+          Logout
+        </paper-item></a>
+        <!-- <paper-item><a href="#profile" layout horizontal center>
+          <core-icon icon="account-circle"></core-icon>
+          Profile
+        </a></paper-item> -->
       </core-menu>
-    </core-dropdown>
-  </core-menu-button>
+    </paper-dropdown>
+  </paper-menu-button>
 
-<div class="content">
+  <div class="content">
 
-  {% if messages.error.length %}
-  <div class="alert alert-danger">
-    {{messages.error|join("<br>"|safe)}}
+    <!-- {% if messages.error.length %}
+    <div class="alert alert-danger">
+      {{messages.error|join("<br>"|safe)}}
+    </div>
+    {% endif %} -->
+
+    <!-- {#% if messages.success %}
+    <div class="alert alert-success">
+      {{messages.success|join("<br>"|safe)}}
+    </div>
+    {% endif %#} -->
+
+    <!-- {#% if !user.isValid %}
+    <div class="alert alert-warning">
+      Please verify your account.
+    </div>
+    {% endif %#} -->
+
+    <h3>Welcome {{user.name}}!</h3>
+
+    <hr>
+
+    <div>
+
+    {% if !user.local.connected and !user.local.signup %}
+      <a href="{{ROUTES.AUTH_LINK}}"><paper-button raised class="default">Link Email</paper-button></a>
+    {% else %}
+      <a href="{{ROUTES.AUTH_UNLINK}}"><paper-button class="default"><strong>Un</strong>link Email</paper-button></a>
+    {% endif %}
+
+    {% if !user.facebook.id %}
+      <a href="{{ROUTES.AUTH_LINK}}/facebook"><paper-button raised class="facebook">Link Facebook</paper-button></a>
+    {% else %}
+      <a href="{{ROUTES.AUTH_UNLINK}}/facebook"><paper-button class="facebook"><strong>Un</strong>link Facebook</paper-button></a>
+    {% endif %}
+
+    {% if !user.twitter.id %}
+      <a href="{{ROUTES.AUTH_LINK}}/twitter"><paper-button raised class="twitter">Link Twitter</paper-button></a>
+    {% else %}
+      <a href="{{ROUTES.AUTH_UNLINK}}/twitter"><paper-button class="twitter"><strong>Un</strong>link Twitter</paper-button></a>
+    {% endif %}
+
+    {% if !user.google.id %}
+      <a href="{{ROUTES.AUTH_LINK}}/google"><paper-button raised class="google">Link Google</paper-button></a>
+    {% else %}
+      <a href="{{ROUTES.AUTH_UNLINK}}/google"><paper-button class="google"><strong>Un</strong>link Google</paper-button></a>
+    {% endif %}
+
+    </div>
   </div>
-  {% endif %}
-
-  {% if messages.success %}
-  <div class="alert alert-success">
-    {{messages.success|join("<br>"|safe)}}
-  </div>
-  {% endif %}
-
-  {% if !user.isValid %}
-  <div class="alert alert-warning">
-    Please verify your account.
-  </div>
-  {% endif %}
-
-  <h3>Welcome {{user.name}}!</h3>
-
-  <hr>
-
-  {% if !user.local.connected and !user.local.signup %}
-    <a href="{{ROUTES.AUTH_LINK}}"><paper-button raised class="default">Link Email</paper-button></a>
-  {% else %}
-    <a href="{{ROUTES.AUTH_UNLINK}}"><paper-button class="default"><strong>Un</strong>link Email</paper-button></a>
-  {% endif %}
-
-  {% if !user.facebook.id %}
-    <a href="{{ROUTES.AUTH_LINK}}/facebook"><paper-button raised class="facebook">Link Facebook</paper-button></a>
-  {% else %}
-    <a href="{{ROUTES.AUTH_UNLINK}}/facebook"><paper-button class="facebook"><strong>Un</strong>link Facebook</paper-button></a>
-  {% endif %}
-
-  {% if !user.twitter.id %}
-    <a href="{{ROUTES.AUTH_LINK}}/twitter"><paper-button raised class="twitter">Link Twitter</paper-button></a>
-  {% else %}
-    <a href="{{ROUTES.AUTH_UNLINK}}/twitter"><paper-button class="twitter"><strong>Un</strong>link Twitter</paper-button></a>
-  {% endif %}
-
-  {% if !user.google.id %}
-    <a href="{{ROUTES.AUTH_LINK}}/google"><paper-button raised class="google">Link Google</paper-button></a>
-  {% else %}
-    <a href="{{ROUTES.AUTH_UNLINK}}/google"><paper-button class="google"><strong>Un</strong>link Google</paper-button></a>
-  {% endif %}
-  </div>
-
 </core-scaffold>
+
+{% if messages.error.length %}
+{% for key, message in messages.error %}
+<paper-toast class="message error" text="{{message}}" autoCloseDisabled="true"></paper-toast>
+{% endfor %}
+{% endif %}
+
+{% if messages.success.length %}
+{% for key, message in messages.success %}
+<paper-toast class="message success" text="{{message}}"></paper-toast>
+{% endfor %}
+{% endif %}
+
+{% if !user.isValid %}
+<paper-toast class="message warning" text="Please verify your account.">
+  <a href="#" style="color: white;" class="nolink">Resend Email</a>
+</paper-toast>
+{% endif %}
+
+<script type="text/javascript">
+  window.addEventListener('polymer-ready', function(e) {
+    Array.prototype.slice.apply(document.querySelectorAll('paper-toast.message')).forEach(function(e,i){
+      setTimeout(function(){
+        e.show()
+      }, i * 3000);
+    });
+  });
+</script>
 
 {% endblock %}
