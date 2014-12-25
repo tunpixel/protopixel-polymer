@@ -1,5 +1,5 @@
 {
-  "excludeFiles": ["node_modules/**", "components/**", "*.test.js", "*.bundle.*"],
+  "excludeFiles": ["node_modules", "components", "generated", "*.test.js", "*.bundle.*"],
   "fileExtensions": [".js"],
   "disallowSpacesInNamedFunctionExpression": {
     "beforeOpeningRoundBrace": true

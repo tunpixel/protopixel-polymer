@@ -1,6 +1,8 @@
 {
   "name": "protopixel-polymer",
+  "description": "...",
   "version": "0.0.0",
+  "author": "Tunpixel",
   "private": true,
   "scripts": {
     "db": "mkdir -p ./db/dev && mongod --dbpath ./db/dev/",
