@@ -27,6 +27,9 @@ var app = require('./app/config/express')(db);
 // Start the app by listening on <port>
 var http = app.listen(config.port);
 
+// Attach WebSocket
+var io = require('./app/config/socket').io;
+io.attach(http);
 
 // Expose app
 exports = module.exports = app;
