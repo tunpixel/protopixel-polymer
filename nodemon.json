@@ -4,7 +4,7 @@
     ".git",
     "node_modules",
     "app/**/*.test.js",
-    "public"
+    "public",
     "components",
     "generated",
     ".sass-cache"

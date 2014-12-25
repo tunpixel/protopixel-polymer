@@ -32,13 +32,7 @@ var path = require('path'),
  */
 
 router.get('/', auth.authenticatedAccessMiddleware, function (req, res, next) {
-  // req.flash('success', 'Hello');
-  // req.flash('success', 'There!');
-  // req.flash('error', 'Hello');
-  // req.flash('error', 'There!');
-  res.render('index.html', {
-    title: "ProtoPixel Polymer"
-  });
+  res.render('index.html');
 });
 
 // router.get('/', function (req, res, next) {

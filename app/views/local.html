@@ -30,6 +30,7 @@
         <label>Email</label>
         <input type="email" class="form-control" name="email" value="{{email}}" required autofocus>
         <span class="help-block">{{fields.email}}</span>
+      </div>
 
               <div class="form-group{% if fields.firstname %} has-error{% endif %}">
         <label>First Name</label>
@@ -41,8 +42,6 @@
         <label>Last Name</label>
         <input type="text" class="form-control" name="lastname" value="{{lastname}}" required autofocus>
         <span class="help-block">{{fields.lastname}}</span>
-      </div>
-
       </div>
 
       <div class="form-group{% if fields.password %} has-error{% endif %}">

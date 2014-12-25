@@ -29,7 +29,7 @@
     <!-- LOGIN FORM -->
     <form action="/auth/reset/{{tockenurl}}" method="post">
 
-         <div class="form-group{% if fields.password %} has-error{% endif %}">
+      <div class="form-group{% if fields.password %} has-error{% endif %}">
         <label>New Password</label>
         <input type="password" class="form-control" name="password" required>
         <span class="help-block">{{fields.password}}</span>

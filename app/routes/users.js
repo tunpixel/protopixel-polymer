@@ -28,9 +28,7 @@ function isAuthenticated(req, res, next) {
 
 /* GET home page. */
 router.get('/', isAuthenticated, function (req, res, next) {
-  res.render('index.html', {
-    title: "My ProtoPixel Polymer"
-  });
+  res.render('index.html');
 });
 
 router.get('/user/:id', function (req, res, next) {

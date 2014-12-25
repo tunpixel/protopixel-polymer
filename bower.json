@@ -12,6 +12,7 @@
     "bootswatch": "~3.2.0",
     "bootswatch-scss": "3.2.0-3",
     "moment": "~2.8.4",
+    "socket.io": "~1.2.1"
     "polymer": "Polymer/polymer#~0.5.1",
     "core-elements": "Polymer/core-elements#~0.5.1",
     "paper-elements": "Polymer/paper-elements#~0.5.1"

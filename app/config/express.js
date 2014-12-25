@@ -155,9 +155,7 @@ module.exports = function (db) {
   var auth = require('./../middlewares/auth');
 
   // app.get('/', auth.authenticatedAccessMiddleware, function (req, res, next) {
-  //   res.render('index.html', {
-  //     title: "ProtoPixel Polymer"
-  //   });
+  //   res.render('index.html');
   // });
 
   app.get('/', function (req, res, next) {
