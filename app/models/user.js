@@ -56,6 +56,7 @@ var UserSchema = new Schema({
       type: Boolean,
       default: false
     },
+
     connected: {
       type: Boolean,
       default: false
@@ -68,8 +69,6 @@ var UserSchema = new Schema({
     type: Boolean,
     default: false
   },
-
-
 
   picture: String,
 
@@ -93,10 +92,12 @@ var UserSchema = new Schema({
       type: Date,
       default: Date.now
     },
+
     facebookId: {
       type: String,
       index: true
     },
+
     facebookSignup: {
       type: Boolean,
       default: false,
@@ -107,10 +108,12 @@ var UserSchema = new Schema({
       type: Boolean,
       default: false
     },
+
     draft: {
       type: Boolean,
       default: false
     },
+
     banned: {
       type: Boolean,
       default: false
