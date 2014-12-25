@@ -334,6 +334,7 @@ router.get('/reset/:token', function (req, res) {
 
 router.post('/reset/:token', function (req, res) {
   async.waterfall([
+
     function (done) {
       UserModel.findOne({
         resetPasswordToken: req.params.token,
@@ -349,7 +350,7 @@ router.post('/reset/:token', function (req, res) {
         }
 
         if (req.body.password !== req.body.passwordConfirmation) {
-          req.flash('error', info.message);
+          req.flash('error', MESSAGES.PASSWORD_MISMATCH);
           return res.render('reset.html', {
             user: req.user,
             tockenurl: req.params.token,
