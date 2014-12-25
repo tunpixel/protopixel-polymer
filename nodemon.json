@@ -4,10 +4,10 @@
     ".git",
     "node_modules",
     "app/**/*.test.js",
+    "public"
     "components",
-    "bower_components",
-    ".sass-cache",
-    "public/**/*"
+    "generated",
+    ".sass-cache"
   ],
   "watch": [
     "packages.json",
