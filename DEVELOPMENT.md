@@ -8,11 +8,6 @@ Development Guidlines
 * add integration testing
 
 ## Enviremennt Setup
-
-* git clone dependency projects
-    * [kool-db](https://bitbucket.org/kool-tn/kool-db) `git clone git@bitbucket.org:kool-tn/kool-db.git`
-    * [kool-media](https://bitbucket.org/kool-tn/kool-media)  `git clone git@bitbucket.org:kool-tn/kool-media.git`
-    * [kool-cache](https://bitbucket.org/kool-tn/kool-cache)  `git clone git@bitbucket.org:kool-tn/kool-cache.git`
 * install dependencies `npm install && bower install`
 * create .env and .env.test file (modified copies of env.default)
 * ...

@@ -11,6 +11,7 @@
   <link rel="import" href="/components/font-roboto/roboto.html">
 
   <style>
+
     html, body {
       height: 100%;
       margin: 0;
@@ -19,6 +20,15 @@
     body {
       font-family: RobotoDraft, 'Helvetica Neue', Helvetica, Arial;
     }
+
+    .dark-primary-color    { background: #7B1FA2; }
+    .default-primary-color { background: #9C27B0; }
+    .light-primary-color   { background: #E1BEE7; }
+    .text-primary-color    { color: #FFFFFF; }
+    .accent-color          { background: #7C4DFF; }
+    .primary-text-color    { color: #212121; }
+    .secondary-text-color  { color: #727272; }
+    .divider-color         { border-color: #B6B6B6; }
 
     core-scaffold {
       position: absolute;
@@ -102,15 +112,15 @@
     }
 
     paper-toast.message.error {
-      color: red;
+      color: #F44336;
     }
 
     paper-toast.message.success {
-      color: green;
+      color: #8BC34A;
     }
 
     paper-toast.message.warning {
-      color: orange;
+      color: #FF9800;
     }
 
   </style>
